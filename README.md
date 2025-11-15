@@ -122,13 +122,15 @@ FRONTEND_URL=https://your-app-name.railway.app
 
 #### 5. Настройка деплоя
 
-1. В настройках сервиса убедитесь, что:
-   - **Root Directory**: оставьте пустым (или укажите `cat-dog` если проект в подпапке)
-   - **Start Command**: Railway автоматически использует Procfile
-   - **Build Command**: Railway автоматически выполнит `npm install` в папке `server`, который запустит `postinstall` скрипт для сборки фронтенда
+1. В настройках сервиса (Settings → Deploy) убедитесь, что:
+   - **Root Directory**: установите в `cat-dog` (если проект находится в подпапке репозитория)
+   - Если проект находится в корне репозитория, оставьте Root Directory пустым
+   - **Build Command**: Railway автоматически использует `nixpacks.toml` для сборки
+   - **Start Command**: Railway автоматически использует команду из `nixpacks.toml` или `Procfile`
 
-2. Если проект находится в подпапке `cat-dog`:
-   - Установите **Root Directory** в `cat-dog`
+2. **Важно**: Убедитесь, что в настройках проекта указан правильный Root Directory:
+   - Если ваш репозиторий содержит только папку `cat-dog`, установите Root Directory в `cat-dog`
+   - Если `cat-dog` - это корень репозитория, оставьте Root Directory пустым
 
 #### 6. Запуск миграций базы данных
 

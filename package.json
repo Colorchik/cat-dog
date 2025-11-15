@@ -1,0 +1,14 @@
+{
+  "name": "cat-dog-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cat and Dog images app",
+  "scripts": {
+    "start": "cd server && npm start"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
+
