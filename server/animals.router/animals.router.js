@@ -9,10 +9,22 @@ animalsRouter.get("/", (req, res) => {
 animalsRouter.post("/favorites", async (req, res) => {
     try {
         const { imageURL, comment } = req.body;
-        const newAnimal = await Animals.create({ imageURL, comment });
+        
+        // Validate input
+        if (!imageURL || typeof imageURL !== 'string') {
+            return res.status(400).json({ error: 'imageURL is required and must be a string' });
+        }
+        
+        // comment is optional, but if provided should be a string
+        if (comment !== undefined && typeof comment !== 'string') {
+            return res.status(400).json({ error: 'comment must be a string if provided' });
+        }
+        
+        const newAnimal = await Animals.create({ imageURL, comment: comment || null });
         res.status(201).json(newAnimal);
     } catch(error) {
-        res.status(500).json({ error: error.message })
+        console.error('Error creating favorite:', error);
+        res.status(500).json({ error: error.message || 'Internal server error' });
     }
 });
 
@@ -21,7 +33,8 @@ animalsRouter.get("/favorites", async (req, res) => {
         const animals = await Animals.findAll();
         res.json(animals);
     } catch(error) {
-        res.status(500).json({ error: error.message })
+        console.error('Error fetching favorites:', error);
+        res.status(500).json({ error: error.message || 'Internal server error' });
     }
 });
 
