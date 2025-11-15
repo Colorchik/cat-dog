@@ -11,7 +11,24 @@ const db = {};
 
 let sequelize;
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  const databaseUrl = process.env[config.use_env_variable];
+  if (!databaseUrl) {
+    throw new Error(
+      `Database URL is not set. Please set the ${config.use_env_variable} environment variable. ` +
+      `Current NODE_ENV: ${env}`
+    );
+  }
+  sequelize = new Sequelize(databaseUrl, {
+    ...config,
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: process.env.NODE_ENV === 'production' ? {
+        require: true,
+        rejectUnauthorized: false
+      } : false
+    },
+    logging: process.env.NODE_ENV === 'development' ? console.log : false
+  });
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
